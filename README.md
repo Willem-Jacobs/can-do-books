@@ -1,13 +1,13 @@
 # Can Do Books - Front End
 
 **Author**: Willem Jacobs
-**Version**: 1.0.1 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 **Deployed Site**: NONE
 **Backend Server** NONE
 
 ## Overview
 
-A site that allows you to enter a city and get back the coordinates of the city along with a full name. A show map button is available to display a map of that city. Uses the LocationIQ API to get the data required. Gets the 5 day forecast for the city searched. Also gets movies from API that shows moves with the city name in the title. Uses a deployed node.js server created on Heroku.com.
+App that uses Auth0 to sign in to site using Google to authenticate then shows different pages (info) to the user to enable or disbale login/logout, profile and the JWT that is returned from the backend API server.
 
 ## Getting Started
 
