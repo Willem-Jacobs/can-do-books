@@ -19,6 +19,8 @@ class MyFavoriteBooks extends React.Component {
     const { getIdTokenClaims } = this.props.auth0;
     let tokenClaims = await getIdTokenClaims();
     const jwt = tokenClaims.__raw;
+    // console.log("JWT: ", jwt);
+    // console.log("TokenClaims: ", tokenClaims);
     const config = {
       headers: { Authorization: `Bearer ${jwt}` },
     };
