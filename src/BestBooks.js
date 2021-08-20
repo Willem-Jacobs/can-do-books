@@ -32,7 +32,7 @@ class MyFavoriteBooks extends React.Component {
 
   render() {
     let renderBooks = <h1>No Books found. Try addng some</h1>;
-    if (this.state.bestBooks.length > 7) {
+    if (this.state.bestBooks.length > 0) {
       renderBooks = this.state.bestBooks.map((book, index) => {
         return (
           <Carousel.Item key={index}>
