@@ -1,8 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Jumbotron from "react-bootstrap/Jumbotron";
+import Carousel from "react-bootstrap/Carousel";
+import Card from "react-bootstrap/Card";
 import { withAuth0 } from "@auth0/auth0-react";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
 
 import "./BestBooks.css";
@@ -11,39 +11,48 @@ class MyFavoriteBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverResponse: "",
+      bestBooks: [],
     };
   }
 
-  makeRequest = async () => {
+  componentDidMount = async () => {
     const { getIdTokenClaims } = this.props.auth0;
     let tokenClaims = await getIdTokenClaims();
     const jwt = tokenClaims.__raw;
-    // console.log("JWT: ", jwt);
-    // console.log("TokenClaims: ", tokenClaims);
     const config = {
       headers: { Authorization: `Bearer ${jwt}` },
     };
 
-    const serverResponse = await axios.get(
-      "http://localhost:3001/test",
-      config
-    );
-
-    console.log("it worked if data:  ", serverResponse);
+    const results = await axios.get("http://localhost:3001/books", config);
+    console.log(results.data);
+    this.setState({
+      bestBooks: results.data,
+    });
   };
 
   render() {
-    const { user } = this.props.auth0;
-    return (
-      <Jumbotron>
-        <h1>My Favorite Books</h1>
-        <p>This is a collection of my favorite books</p>
-        {user && (
-          <Button onClick={this.makeRequest}>Make Request to Server</Button>
-        )}
-      </Jumbotron>
-    );
+    let renderBooks = <h1>No Books found. Try addng some</h1>;
+    if (this.state.bestBooks.length > 7) {
+      renderBooks = this.state.bestBooks.map((book, index) => {
+        return (
+          <Carousel.Item key={index}>
+            <Card style={{ width: "20rem", height: "20rem" }}>
+              <Card.Body>
+                <Card.Title>
+                  <h2>{book.title}</h2>
+                </Card.Title>
+                <Card.Text>
+                  <h4>{book.description}</h4>
+                  <p>Email: {book.email}</p>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Carousel.Item>
+        );
+      });
+    }
+
+    return <Carousel>{renderBooks}</Carousel>;
   }
 }
 

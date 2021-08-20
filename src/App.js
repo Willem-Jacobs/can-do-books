@@ -12,7 +12,6 @@ import { withAuth0 } from "@auth0/auth0-react";
 class App extends React.Component {
   render() {
     const { isAuthenticated } = this.props.auth0;
-    console.log("app", this.props.auth0);
     return (
       <>
         <Router>
