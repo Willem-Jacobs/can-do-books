@@ -7,6 +7,7 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import { withAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import UpdateBook from "./UdpateBook";
 
 import "./BestBooks.css";
 
@@ -16,6 +17,7 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       bestBooks: [],
       showModal: false,
+      updateModal: false,
     };
   }
 
@@ -47,6 +49,15 @@ class MyFavoriteBooks extends React.Component {
     this.setState({ showModal: true });
   };
 
+  showUpdateModalHandler = (book) => {
+    this.setState({ bookToUpdate: book });
+    this.setState({ updateModal: true });
+  };
+
+  closeUpdateModalHandler = () => {
+    this.setState({ updateModal: false });
+  };
+
   addNewBookSubmitHandler = (event) => {
     event.preventDefault();
     const bookTitle = event.target.bookTitle.value;
@@ -59,7 +70,6 @@ class MyFavoriteBooks extends React.Component {
       email: this.props.auth0.user.email,
     };
     this.closeModalHandler();
-    // console.log(newBookObject);
     this.postNewBookHandler(newBookObject);
   };
 
@@ -104,6 +114,16 @@ class MyFavoriteBooks extends React.Component {
                   <Button onClick={() => this.deleteBookHandler(book._id)}>
                     Delete Book
                   </Button>
+                  <Button onClick={() => this.showUpdateModalHandler(book)}>
+                    Update Book
+                  </Button>
+                  {this.state.updateModal && (
+                    <UpdateBook
+                      book={this.state.bookToUpdate}
+                      updateModal={this.state.updateModal}
+                      closeUpdateModalHandler={this.closeUpdateModalHandler}
+                    />
+                  )}
                   <p>Email: {book.email}</p>
                 </Card.Text>
               </Card.Body>
