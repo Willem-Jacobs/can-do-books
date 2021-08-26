@@ -77,7 +77,7 @@ No collaborations from others on this project.
 
 **Actual time needed to complete:** 2 hours. The time seems more but I took long breaks to cook, spend time with kids, eat and code when I can. I am not happy with the final outcome at this time but I will submit this for credit and work more on it as I can.
 
-### Lab 14 Trello Card #1
+### Lab 14 Trello Card #2
 
 **Name of feature:** Mongoose Refactor/Cleanup & added CRUD (UPDATE using the PUT)
 
