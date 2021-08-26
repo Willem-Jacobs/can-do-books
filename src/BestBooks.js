@@ -7,6 +7,7 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import { withAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
+import UpdateBook from "./UdpateBook";
 
 import "./BestBooks.css";
 
@@ -16,6 +17,7 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       bestBooks: [],
       showModal: false,
+      showUpdateModal: false,
     };
   }
 
@@ -47,6 +49,15 @@ class MyFavoriteBooks extends React.Component {
     this.setState({ showModal: true });
   };
 
+  showUpdateModalHandler = (book) => {
+    this.setState({ bookToUpdate: book });
+    this.setState({ showUpdateModal: true });
+  };
+
+  closeUpdateModalHandler = () => {
+    this.setState({ showUpdateModal: false });
+  };
+
   addNewBookSubmitHandler = (event) => {
     event.preventDefault();
     const bookTitle = event.target.bookTitle.value;
@@ -59,7 +70,6 @@ class MyFavoriteBooks extends React.Component {
       email: this.props.auth0.user.email,
     };
     this.closeModalHandler();
-    // console.log(newBookObject);
     this.postNewBookHandler(newBookObject);
   };
 
@@ -87,6 +97,22 @@ class MyFavoriteBooks extends React.Component {
     }
   };
 
+  updateBookHandler = async (book) => {
+    try {
+      await axios.put(`http://localhost:3001/books/${book._id}`, book);
+      const updateBooks = this.state.bestBooks.map((item) => {
+        if (item._id === book._id) {
+          return book;
+        } else {
+          return item;
+        }
+      });
+      this.setState({ bestBooks: updateBooks });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     let renderBooks = <h1>No Books found. Try adding some</h1>;
     if (this.state.bestBooks.length > 0) {
@@ -104,6 +130,17 @@ class MyFavoriteBooks extends React.Component {
                   <Button onClick={() => this.deleteBookHandler(book._id)}>
                     Delete Book
                   </Button>
+                  <Button onClick={() => this.showUpdateModalHandler(book)}>
+                    Update Book
+                  </Button>
+                  {this.state.showUpdateModal && (
+                    <UpdateBook
+                      book={this.state.bookToUpdate}
+                      showUpdateModal={this.state.showUpdateModal}
+                      closeUpdateModalHandler={this.closeUpdateModalHandler}
+                      updateBookHandler={this.updateBookHandler}
+                    />
+                  )}
                   <p>Email: {book.email}</p>
                 </Card.Text>
               </Card.Body>
