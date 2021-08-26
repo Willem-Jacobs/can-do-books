@@ -8,9 +8,10 @@ class UpdateBook extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      _id: this.props.book._id,
       title: this.props.book.title,
       description: this.props.book.description,
-      status: this.props.book.description,
+      status: this.props.book.status,
       email: this.props.book.email,
     };
   }
@@ -31,6 +32,14 @@ class UpdateBook extends React.Component {
   //     this.postNewBookHandler(newBookObject);
   //   };
 
+  updateBookSubmitHandler = (event) => {
+    event.preventDefault();
+    const updatedNewBook = this.state;
+    // console.log("Updated Book before save: ", updatedNewBook);
+    this.props.updateBookHandler(updatedNewBook);
+    this.props.closeUpdateModalHandler();
+  };
+
   fieldChangeHandler = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -39,14 +48,14 @@ class UpdateBook extends React.Component {
     return (
       <>
         <Modal
-          show={this.props.updateModal}
+          show={this.props.showUpdateModal}
           onHide={this.props.closeUpdateModalHandler}
         >
           <Modal.Header>
             <Modal.Title>Add New Book</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.updateBookSubmitHandler}>
               <Form.Group controlId="title">
                 <Form.Label>Book Title</Form.Label>
                 <Form.Control

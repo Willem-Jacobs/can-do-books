@@ -17,7 +17,7 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       bestBooks: [],
       showModal: false,
-      updateModal: false,
+      showUpdateModal: false,
     };
   }
 
@@ -51,11 +51,11 @@ class MyFavoriteBooks extends React.Component {
 
   showUpdateModalHandler = (book) => {
     this.setState({ bookToUpdate: book });
-    this.setState({ updateModal: true });
+    this.setState({ showUpdateModal: true });
   };
 
   closeUpdateModalHandler = () => {
-    this.setState({ updateModal: false });
+    this.setState({ showUpdateModal: false });
   };
 
   addNewBookSubmitHandler = (event) => {
@@ -97,6 +97,22 @@ class MyFavoriteBooks extends React.Component {
     }
   };
 
+  updateBookHandler = async (book) => {
+    try {
+      await axios.put(`http://localhost:3001/books/${book._id}`, book);
+      const updateBooks = this.state.bestBooks.map((item) => {
+        if (item._id === book._id) {
+          return book;
+        } else {
+          return item;
+        }
+      });
+      this.setState({ bestBooks: updateBooks });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     let renderBooks = <h1>No Books found. Try adding some</h1>;
     if (this.state.bestBooks.length > 0) {
@@ -117,11 +133,12 @@ class MyFavoriteBooks extends React.Component {
                   <Button onClick={() => this.showUpdateModalHandler(book)}>
                     Update Book
                   </Button>
-                  {this.state.updateModal && (
+                  {this.state.showUpdateModal && (
                     <UpdateBook
                       book={this.state.bookToUpdate}
-                      updateModal={this.state.updateModal}
+                      showUpdateModal={this.state.showUpdateModal}
                       closeUpdateModalHandler={this.closeUpdateModalHandler}
+                      updateBookHandler={this.updateBookHandler}
                     />
                   )}
                   <p>Email: {book.email}</p>
